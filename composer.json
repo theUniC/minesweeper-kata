@@ -1,0 +1,29 @@
+{
+    "name": "theunic/minesweeper-kata",
+    "description": "Minesweeper Kata",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Soronellas",
+            "email": "theunic@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "": "tests/"
+        }
+    }
+}

@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+use MineSweeperKata\MineSweeper;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$fh = fopen('php://stdin', 'r');
+
+$fields = [];
+$end = false;
+$m = $n = 0;
+$field = [];
+
+while (false === $end) {
+    $line = fgets($fh);
+
+    if (false !== strpos($line, ' ')) {
+        list($n, $m) = array_map('intval', array_map('trim', explode(' ', $line)));
+        $field = [];
+        continue;
+    }
+
+    if (0 === $n && 0 === $m) {
+        $end = true;
+        continue;
+    }
+
+    $field[] = substr($line, 0, $m);
+    $n--;
+
+    if (0 === $n) {
+        $fields[] = implode("\n", $field);
+    }
+}
+
+fclose($fh);
+
+foreach ($fields as $index => $field) {
+    echo sprintf('Field #%d', $index + 1) . PHP_EOL . MineSweeper::parse($field)->resolve() . PHP_EOL . PHP_EOL;
+}
+
+die(0);
