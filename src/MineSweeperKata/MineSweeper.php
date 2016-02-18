@@ -54,13 +54,7 @@ class MineSweeper implements Countable
 
     private function resolveRows(Grid $grid): array
     {
-        return array_map(
-            function ($rowNumber, array $row) {
-                return $this->resolveRow($rowNumber, $row);
-            },
-            array_keys($grid->cells()),
-            $grid->cells()
-        );
+        return array_map([$this, 'resolveRow'], array_keys($grid->cells()), $grid->cells());
     }
 
     private function resolveRow(int $rowNumber, array $row): string
