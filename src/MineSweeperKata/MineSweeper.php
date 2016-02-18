@@ -44,30 +44,49 @@ class MineSweeper implements Countable
 
     public function resolve(): string
     {
-        return
-            implode(
-                "\r\n",
-                array_map(
-                    function($rowNumber, array $row) {
-                        return implode(
-                            '',
-                            array_map(
-                                function ($cellNumber, Cell $cell) use ($rowNumber) {
-                                    if ($cell->isMine()) {
-                                        return '*';
-                                    }
+        return $this->joinRows($this->resolveRows($this->grid));
+    }
 
-                                    return $this->minesNearOf($rowNumber + 1, $cellNumber + 1);
-                                },
-                                array_keys($row),
-                                $row
-                            )
-                        );
-                    },
-                    array_keys($this->grid->cells()),
-                    $this->grid->cells()
-                )
-            )
-        ;
+    private function joinRows(array $rows): string
+    {
+        return implode("\r\n", $rows);
+    }
+
+    private function resolveRows(Grid $grid): array
+    {
+        return array_map(
+            function ($rowNumber, array $row) {
+                return $this->resolveRow($rowNumber, $row);
+            },
+            array_keys($grid->cells()),
+            $grid->cells()
+        );
+    }
+
+    private function resolveRow(int $rowNumber, array $row): string
+    {
+        $cells = array_map(
+            function ($cellNumber, Cell $cell) use ($rowNumber) {
+                return $this->resolveCell($cellNumber, $rowNumber, $cell);
+            },
+            array_keys($row),
+            $row
+        );
+
+        return $this->joinCells($cells);
+    }
+
+    private function resolveCell(int $cellNumber, int $rowNumber, Cell $cell): string
+    {
+        if ($cell->isMine()) {
+            return '*';
+        }
+
+        return $this->minesNearOf($rowNumber + 1, $cellNumber + 1);
+    }
+
+    private function joinCells($cells)
+    {
+        return implode('', $cells);
     }
 }
